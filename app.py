@@ -49,7 +49,7 @@ UPDATE_CLIENTE_ONE = "UPDATE cliente SET num_funcionarios = %s, faturamento_anua
 SELECT_COLUMNS = "SELECT column_name FROM information_schema.columns WHERE table_name = %s"
 
 
-# função para buscar os informações da empresa de acordo com o CNPJ. apenas numeros
+# função para buscar os informações da empresa de acordo com o CNPJ.
 def get_rf_data(cnpj):
     cnpj = re.sub(r"[^\w\d]", "", cnpj) #função regex para retirar a mascara do CNPJ.
     url = f'https://receitaws.com.br/v1/cnpj/{cnpj}'
@@ -57,7 +57,7 @@ def get_rf_data(cnpj):
     data = response.json()
     return data
     
-# transforma array em json de acordo com as colunas do banco
+# transforma o array de valores em json de acordo com as colunas do banco
 def transforma_json(valor):    
     chave = get_colunas('cliente')
     
@@ -65,7 +65,6 @@ def transforma_json(valor):
         raise ValueError("Os arrays de chave e valor devem ter o mesmo tamanho.")
 
     result = {}
-    
     for i in range(len(chave)):
         result[chave[i]]=valor[i]
         
@@ -77,10 +76,12 @@ def get_colunas(nome_tabela):
     cursor.execute(SELECT_COLUMNS,(nome_tabela,))
     
     colunas = cursor.fetchall()
-    
     result = [coluna[0] for coluna in colunas]
     
     return result
+
+
+##### ROTAS HTTP ####
 
 # Inserir clientes na base
 @app.route('/api/clientes', methods=['POST'])
@@ -120,6 +121,8 @@ def create_cliente():
 
     return jsonify({'message': 'Cliente cadastrado com sucesso', 'dados': rf_data}), 201
 
+
+# Retorna todos os clientes ou os clientes especificos de um vendendor.
 @app.route('/api/vendedor', methods=['GET'])
 def get_cliente():
     data = request.get_json()
@@ -139,9 +142,8 @@ def get_cliente():
     result = [transforma_json(registro) for registro in response]
     
     return jsonify(result), 200
-# verificar pq não esta voltando um JSON.
 
-# Metodo get para  buscar um cliente pelo ID
+# Retorna um cliente do banco pelo ID.
 @app.route('/api/buscarcliente/<int:id>', methods=['GET'])
 def get_cliente_one(id):
     id_cliente = int(id)
@@ -154,7 +156,7 @@ def get_cliente_one(id):
     
     return jsonify(response)
 
-# Alterar informações do cliente
+# Altera as informações do cliente pelo ID.
 @app.route('/api/alterarcliente/<int:id>', methods=['POST'])
 def update_cliente_one(id):
     id_cliente = int(id)
