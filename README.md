@@ -65,4 +65,4 @@ Para essa API Simples foi usado apenas uma tabela que cumpre seu objetivo, caso 
 
 ## Considerações Finais
 
-Esta API foi desenvolvida para um processo seletivo em 2 dias, há muito a melhorar para se tornar uma aplicação escalável, porém compre seu objetivo de Cadastrar clientes e ter acesso a eles.
+Esta API foi desenvolvida para um processo seletivo em 2 dias, há muito a melhorar para se tornar uma aplicação escalável, porém cumpre seu objetivo de Cadastrar clientes e ter acesso a eles.
